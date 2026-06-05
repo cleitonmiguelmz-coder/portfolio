@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleiton Miguel Sitoe — Dev + Estrategista de Produto SaaS</title>
+<meta name="description" content="Developer e estrategista de produto digital baseado em Moçambique. Next.js, SaaS, Marketplaces, Apps.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #f0f0f0;
+    --text-muted: #666;
+    --text-dim: #3a3a3a;
+    --white: #ffffff;
+    --mono: 'Geist Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 60px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+  .nav-logo span { color: var(--white); }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  /* LANGUAGE TOGGLE */
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .lang-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .lang-btn.active {
+    color: var(--bg);
+    background: var(--white);
+  }
+
+  .lang-btn:not(.active):hover { color: var(--white); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid var(--border-hover);
+    padding: 7px 16px;
+    border-radius: 4px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .nav-cta:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); }
+
+  /* SECTIONS */
+  section { max-width: 860px; margin: 0 auto; padding: 0 48px; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 60px;
+    max-width: 860px;
+    margin: 0 auto;
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero-label::before { content: '—'; margin-right: 10px; color: var(--text-dim); }
+
+  h1 {
+    font-size: clamp(42px, 7vw, 80px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--white);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s forwards;
+  }
+  h1 em { font-style: italic; color: var(--text-muted); font-weight: 300; }
+
+  .hero-bio {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 520px;
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.35s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.45s forwards;
+  }
+
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--bg);
+    background: var(--white);
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+
+  .btn-ghost {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 12px 0;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-ghost:hover { color: var(--white); }
+  .btn-ghost::after { content: '↗'; font-size: 11px; }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 48px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* SOBRE / ABOUT */
+  #sobre { padding-top: 120px; padding-bottom: 120px; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .sobre-text {
+    font-size: 17px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.8;
+  }
+  .sobre-text p + p { margin-top: 20px; }
+
+  .skills-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .skills-list li {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.2s;
+  }
+  .skills-list li:first-child { border-top: 1px solid var(--border); }
+  .skills-list li:hover { color: var(--white); }
+
+  .skill-dot {
+    width: 5px; height: 5px;
+    background: var(--text-dim);
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+  .skills-list li:hover .skill-dot { background: var(--white); }
+
+  /* PROJETOS */
+  #projetos { padding-top: 120px; padding-bottom: 120px; }
+
+  .projects-list { display: flex; flex-direction: column; }
+
+  .project-item {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 32px;
+    align-items: center;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .project-item:first-child { border-top: 1px solid var(--border); }
+  .project-item:hover { border-color: var(--border-hover); }
+  .project-item:hover .project-num { color: var(--white); }
+  .project-item:hover .project-arrow { opacity: 1; transform: translate(2px, -2px); }
+
+  .project-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  .project-name {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .project-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.04em;
+  }
+
+  .project-arrow {
+    font-size: 18px;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  /* CONTACTO */
+  #contacto { padding-top: 120px; padding-bottom: 160px; }
+
+  .contact-heading {
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 48px;
+  }
+  .contact-heading em { font-style: italic; color: var(--text-muted); }
+
+  .contact-links { display: flex; flex-direction: column; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .contact-link:first-child { border-top: 1px solid var(--border); }
+  .contact-link:hover { border-color: var(--border-hover); }
+  .contact-link:hover .contact-link-label { color: var(--white); }
+  .contact-link:hover .contact-link-arrow { opacity: 1; }
+
+  .contact-link-left { display: flex; align-items: center; gap: 24px; }
+
+  .contact-link-type {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    width: 80px;
+  }
+
+  .contact-link-label {
+    font-size: 17px;
+    color: var(--text-muted);
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+
+  .contact-link-arrow {
+    font-size: 16px;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-name { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+  .footer-copy { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* LANG TRANSITION */
+  [data-pt], [data-en] { transition: opacity 0.2s; }
+
+  /* MOBILE */
+  @media (max-width: 640px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    #hero, section { padding-left: 24px; padding-right: 24px; }
+    .hero-scroll { left: 24px; }
+    footer { padding: 28px 24px; flex-direction: column; gap: 8px; align-items: flex-start; }
+    .sobre-grid { grid-template-columns: 1fr; gap: 48px; }
+    .project-item { grid-template-columns: 36px 1fr auto; gap: 16px; }
+    .contact-link-type { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span>Cleiton</span>.dev</div>
+  <div class="nav-center">
+    <ul class="nav-links">
+      <li><a href="#sobre" data-pt="Sobre" data-en="About">Sobre</a></li>
+      <li><a href="#projetos" data-pt="Projetos" data-en="Projects">Projetos</a></li>
+      <li><a href="#contacto" data-pt="Contacto" data-en="Contact">Contacto</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="https://wa.me/258856669284" target="_blank" class="nav-cta" data-pt="Falar comigo" data-en="Let's talk">Falar comigo</a>
+  </div>
+</nav>
+
+<div style="position:relative">
+  <div id="hero">
+    <p class="hero-label" data-pt="Disponível para projetos" data-en="Available for projects">Disponível para projetos</p>
+    <h1>Dev & <em data-pt="Produto" data-en="Product">Produto</em><br><span data-pt="Digital" data-en="Digital">Digital</span></h1>
+    <p class="hero-bio" data-pt="Construo plataformas web e aplicações móveis com Next.js, com foco em produtos que geram receita real — desde o MVP até à escala." data-en="I build web platforms and mobile apps with Next.js, focused on products that generate real revenue — from MVP to scale.">
+      Construo plataformas web e aplicações móveis com Next.js, com foco em produtos que geram receita real — desde o MVP até à escala.
+    </p>
+    <div class="hero-actions">
+      <a href="#projetos" class="btn-primary" data-pt="Ver projetos" data-en="View projects">Ver projetos</a>
+      <a href="#contacto" class="btn-ghost" data-pt="Contactar" data-en="Contact">Contactar</a>
+    </div>
+  </div>
+  <p class="hero-scroll">scroll ↓</p>
+</div>
+
+<hr class="divider">
+
+<section id="sobre">
+  <p class="section-label reveal" data-pt="01 — Sobre" data-en="01 — About">01 — Sobre</p>
+  <div class="sobre-grid">
+    <div class="sobre-text reveal">
+      <p data-pt="Sou Cleiton Miguel Sitoe, developer e estrategista de produto digital baseado em Moçambique. Construo plataformas web e aplicações móveis com Next.js, com foco em produtos que geram receita real — desde o MVP até à escala." data-en="I'm Cleiton Miguel Sitoe, a developer and digital product strategist based in Mozambique. I build web platforms and mobile apps with Next.js, focused on products that generate real revenue — from MVP to scale.">
+        Sou Cleiton Miguel Sitoe, developer e estrategista de produto digital baseado em Moçambique. Construo plataformas web e aplicações móveis com Next.js, com foco em produtos que geram receita real — desde o MVP até à escala.
+      </p>
+      <p data-pt="Já criei marketplaces, sistemas de funis de vendas e apps de delivery, combinando execução técnica com visão de negócio. Se tens uma ideia ou um produto que precisa sair do papel, é aqui que começa." data-en="I've built marketplaces, sales funnel systems and delivery apps, combining technical execution with business vision. If you have an idea or a product that needs to come to life, this is where it starts.">
+        Já criei marketplaces, sistemas de funis de vendas e apps de delivery, combinando execução técnica com visão de negócio. Se tens uma ideia ou um produto que precisa sair do papel, é aqui que começa.
+      </p>
+    </div>
+    <ul class="skills-list reveal">
+      <li>Next.js + Tailwind CSS <span class="skill-dot"></span></li>
+      <li>Framer Motion <span class="skill-dot"></span></li>
+      <li><span data-pt="Arquitectura SaaS" data-en="SaaS Architecture">Arquitectura SaaS</span> <span class="skill-dot"></span></li>
+      <li><span data-pt="Fintech & Pagamentos" data-en="Fintech & Payments">Fintech & Pagamentos</span> <span class="skill-dot"></span></li>
+      <li><span data-pt="Funis de Vendas" data-en="Sales Funnels">Funis de Vendas</span> <span class="skill-dot"></span></li>
+      <li><span data-pt="Growth & Copywriting" data-en="Growth & Copywriting">Growth & Copywriting</span> <span class="skill-dot"></span></li>
+      <li><span data-pt="MVP → Produção" data-en="MVP → Production">MVP → Produção</span> <span class="skill-dot"></span></li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="projetos">
+  <p class="section-label reveal" data-pt="02 — Projetos" data-en="02 — Projects">02 — Projetos</p>
+  <div class="projects-list">
+
+    <a class="project-item reveal" href="https://appmarket-mz.vercel.app/" target="_blank">
+      <span class="project-num">01</span>
+      <div class="project-info">
+        <p class="project-name">AppMarket.mz</p>
+        <p class="project-desc" data-pt="Marketplace premium de aplicações, sistemas e soluções digitais para Moçambique e mercado internacional." data-en="Premium marketplace for apps, systems and digital solutions for Mozambique and the international market.">
+          Marketplace premium de aplicações, sistemas e soluções digitais para Moçambique e mercado internacional.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Next.js</span>
+          <span class="tag">Marketplace</span>
+          <span class="tag">SEO</span>
+          <span class="tag" data-pt="Multi-página" data-en="Multi-page">Multi-página</span>
+        </div>
+      </div>
+      <span class="project-arrow">↗</span>
+    </a>
+
+    <a class="project-item reveal" href="https://funilapp.vercel.app/" target="_blank">
+      <span class="project-num">02</span>
+      <div class="project-info">
+        <p class="project-name">FunilApp</p>
+        <p class="project-desc" data-pt="Sistema SaaS de funis de vendas com integração WhatsApp. Construído para equipas de vendas e empreendedores digitais." data-en="SaaS sales funnel system with WhatsApp integration. Built for sales teams and digital entrepreneurs.">
+          Sistema SaaS de funis de vendas com integração WhatsApp. Construído para equipas de vendas e empreendedores digitais.
+        </p>
+        <div class="project-tags">
+          <span class="tag">SaaS</span>
+          <span class="tag">WhatsApp</span>
+          <span class="tag">Next.js</span>
+          <span class="tag" data-pt="Vendas" data-en="Sales">Vendas</span>
+        </div>
+      </div>
+      <span class="project-arrow">↗</span>
+    </a>
+
+    <a class="project-item reveal" href="https://swiftbite-app-ten.vercel.app/" target="_blank">
+      <span class="project-num">03</span>
+      <div class="project-info">
+        <p class="project-name">SwiftBite</p>
+        <p class="project-desc" data-pt="Aplicação de delivery mobile-first com listagem de restaurantes, categorias, ratings e navegação fluida." data-en="Mobile-first delivery app with restaurant listings, categories, ratings and smooth navigation.">
+          Aplicação de delivery mobile-first com listagem de restaurantes, categorias, ratings e navegação fluida.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Next.js</span>
+          <span class="tag">Mobile-first</span>
+          <span class="tag">Delivery</span>
+          <span class="tag">UI/UX</span>
+        </div>
+      </div>
+      <span class="project-arrow">↗</span>
+    </a>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<section id="contacto">
+  <p class="section-label reveal" data-pt="03 — Contacto" data-en="03 — Contact">03 — Contacto</p>
+  <h2 class="contact-heading reveal">
+    <span data-pt="Tens um projeto?" data-en="Got a project?">Tens um projeto?</span><br>
+    <em data-pt="Vamos falar." data-en="Let's talk.">Vamos falar.</em>
+  </h2>
+  <div class="contact-links">
+    <a class="contact-link reveal" href="https://wa.me/258856669284" target="_blank">
+      <div class="contact-link-left">
+        <span class="contact-link-type">WhatsApp</span>
+        <span class="contact-link-label">+258 85 666 9284</span>
+      </div>
+      <span class="contact-link-arrow">↗</span>
+    </a>
+    <a class="contact-link reveal" href="mailto:cleiton.miguel.mz@gmail.com">
+      <div class="contact-link-left">
+        <span class="contact-link-type">Email</span>
+        <span class="contact-link-label">cleiton.miguel.mz@gmail.com</span>
+      </div>
+      <span class="contact-link-arrow">↗</span>
+    </a>
+    <a class="contact-link reveal" href="https://github.com/cleitonmiguelmz-coder" target="_blank">
+      <div class="contact-link-left">
+        <span class="contact-link-type">GitHub</span>
+        <span class="contact-link-label">cleitonmiguelmz-coder</span>
+      </div>
+      <span class="contact-link-arrow">↗</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-name">Cleiton Miguel Sitoe</span>
+  <span class="footer-copy">© 2025 — Maputo, Moçambique</span>
+</footer>
+
+<script>
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // LANGUAGE TOGGLE
+  let currentLang = 'pt';
+
+  function setLang(lang) {
+    currentLang = lang;
+
+    // Update button states
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+    });
+
+    // Update all elements with data-pt / data-en
+    document.querySelectorAll('[data-pt]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text) el.textContent = text;
+    });
+
+    // Update html lang attribute
+    document.documentElement.lang = lang;
+  }
+</script>
+
+</body>
+</html>
